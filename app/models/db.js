@@ -1,11 +1,16 @@
-const mysql = require("mysql");
-const dbConfig = require("../config/db.config.js");
+// Load modules
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 
-var connection = mysql.createPool({
-  host: dbConfig.HOST,
-  user: dbConfig.USER,
-  password: dbConfig.PASSWORD,
-  database: dbConfig.DB
+// Connect with SQLite database
+const db_path = path.join(__dirname, '../db', 'comisiones.db');
+
+const appDatabase = new sqlite3.Database(db_path, sqlite3.OPEN_READWRITE, err => {
+  if (err) {
+    console.error(err.message);
+  }
+  console.log('Successfully connected to the database');
 });
 
-module.exports = connection;
+// Export database object
+module.exports = { appDatabase };

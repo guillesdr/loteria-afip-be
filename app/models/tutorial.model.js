@@ -1,7 +1,7 @@
-const sql = require("./db.js");
+const database = require("./db.js");
 
 // constructor
-const Tutorial = function(tutorial) {
+const Tutorial = function (tutorial) {
   this.title = tutorial.title;
   this.description = tutorial.description;
   this.published = tutorial.published;
@@ -39,13 +39,27 @@ Tutorial.findById = (id, result) => {
   });
 };
 
-Tutorial.getAll = (title, result) => {
-  let query = "SELECT * FROM tutorials";
 
-  if (title) {
-    query += ` WHERE title LIKE '%${title}%'`;
-  }
+Tutorial.getAll = (result) => {
+  let sql = "SELECT * FROM juegos";
 
+
+
+  // first row only
+  database.appDatabase.all(sql, [], (err, res) => {
+    if (err) {
+      result(null, err);
+      return;
+    }
+
+    result(null, res);
+    return;
+
+  });
+
+
+
+  /*
   sql.query(query, (err, res) => {
     if (err) {
       console.log("error: ", err);
@@ -53,9 +67,20 @@ Tutorial.getAll = (title, result) => {
       return;
     }
 
-    console.log("tutorials: ", res);
-    result(null, res);
-  });
+    */
+  /*
+    database.appDatabase.all(query, [], (err, result) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+      console.log("tutorials: ", result);
+      result(null, result);
+      return
+    });
+  */
+
 };
 
 Tutorial.getAllPublished = result => {

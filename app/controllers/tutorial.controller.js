@@ -31,13 +31,10 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   const title = req.query.title;
 
-  Tutorial.getAll(title, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
-      });
-    else res.send(data);
+  Tutorial.getAll((title, data) => {
+    console.log(data);
+    res.send(data)
+    //res.render('index', { tasks: queryResult });
   });
 };
 
@@ -128,3 +125,23 @@ exports.deleteAll = (req, res) => {
     else res.send({ message: `All Tutorials were deleted successfully!` });
   });
 };
+
+
+
+/*
+
+
+// Load modules
+const taskModel = require('../models/taskModels');
+const { validationResult } = require('express-validator');
+
+// Index page controller
+function index_page_get (request, response) {
+  taskModel.getTasks((queryResult) => {
+    console.log(queryResult);
+    response.render('index', { tasks: queryResult });
+  });
+};
+
+
+*/
