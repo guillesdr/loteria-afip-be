@@ -1,27 +1,27 @@
 const database = require("./db.js");
 
 // constructor
-const Tutorial = function (tutorial) {
-  this.title = tutorial.title;
-  this.description = tutorial.description;
-  this.published = tutorial.published;
+const Padron = function (Padron) {
+  this.title = Padron.title;
+  this.description = Padron.description;
+  this.published = Padron.published;
 };
 
-Tutorial.create = (newTutorial, result) => {
-  sql.query("INSERT INTO tutorials SET ?", newTutorial, (err, res) => {
+Padron.create = (newPadron, result) => {
+  sql.query("INSERT INTO Padrons SET ?", newPadron, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
 
-    console.log("created tutorial: ", { id: res.insertId, ...newTutorial });
-    result(null, { id: res.insertId, ...newTutorial });
+    console.log("created Padron: ", { id: res.insertId, ...newPadron });
+    result(null, { id: res.insertId, ...newPadron });
   });
 };
 
-Tutorial.findById = (id, result) => {
-  sql.query(`SELECT * FROM tutorials WHERE id = ${id}`, (err, res) => {
+Padron.findById = (id, result) => {
+  sql.query(`SELECT * FROM Padrons WHERE id = ${id}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -29,18 +29,18 @@ Tutorial.findById = (id, result) => {
     }
 
     if (res.length) {
-      console.log("found tutorial: ", res[0]);
+      console.log("found Padron: ", res[0]);
       result(null, res[0]);
       return;
     }
 
-    // not found Tutorial with the id
+    // not found Padron with the id
     result({ kind: "not_found" }, null);
   });
 };
 
 
-Tutorial.getAll = (result) => {
+Padron.getAll = (result) => {
   let sql = "SELECT * FROM padron";
 
   // first row only
@@ -60,17 +60,17 @@ Tutorial.getAll = (result) => {
 
 };
 
-Tutorial.removeAll = result => {
-  sql.query("DELETE FROM tutorials", (err, res) => {
+Padron.removeAll = result => {
+  sql.query("DELETE FROM Padrons", (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
       return;
     }
 
-    console.log(`deleted ${res.affectedRows} tutorials`);
+    console.log(`deleted ${res.affectedRows} Padrons`);
     result(null, res);
   });
 };
 
-module.exports = Tutorial;
+module.exports = Padron;

@@ -34,7 +34,6 @@ exports.findAll = (req, res) => {
   Tutorial.getAll((title, data) => {
     console.log(data);
     res.send(data)
-    //res.render('index', { tasks: queryResult });
   });
 };
 
