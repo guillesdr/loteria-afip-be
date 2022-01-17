@@ -1,30 +1,25 @@
+// Load required modules
 const express = require("express");
-// const bodyParser = require("body-parser"); /* deprecated */
-const cors = require("cors");
+const path = require("path");
+const taskRoutes = require("./app/routes/taskRoutes");
 
+// Create express application
 const app = express();
 
-var corsOptions = {
-  origin: "http://localhost:8081"
-};
-
-app.use(cors(corsOptions));
-
-// parse requests of content-type - application/json
-app.use(express.json()); /* bodyParser.json() is deprecated */
-
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is deprecated */
-
-// simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+// Listen on port 8080 for connections
+app.listen(8080, () => {
+  console.log(`Server started and listening at http://localhost:8080`);
 });
 
-require("./app/routes/tutorial.routes.js")(app);
+// Set view engine and views directory
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-// set port, listen for requests
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
+// Serve static files
+app.use(express.static(path.join(__dirname, "public")));
+
+// Handle HTTP POST requests
+app.use(express.urlencoded({ extended: true }));
+
+// Application routes
+app.use(taskRoutes);
