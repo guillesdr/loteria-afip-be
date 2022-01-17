@@ -2,46 +2,37 @@ const database = require("./db.js");
 
 // constructor
 const Retencion = function (Retencion) {
-  this.title = Retencion.title;
-  this.description = Retencion.description;
-  this.published = Retencion.published;
+  this.periodo = Retencion.periodo;
+  this.agente = Retencion.agente;
+  this.contribuyente = Retencion.contribuyente;
+  this.numeroInscripcion = Retencion.numeroInscripcion;
+  this.base = Retencion.base;
+  this.certificado = Retencion.certificado;
+  this.retenido = Retencion.retenido;
 };
 
 Retencion.create = (newRetencion, result) => {
-  database.appDatabase.run("INSERT INTO retenciones SET ?", newRetencion, (err, res) => {
+
+  let sql = "INSERT INTO retenciones(periodo, agente, contribuyente, numeroInscripcion, base, certificado, retenido) VALUES(?,?)";
+  // first row only
+  database.appDatabase.all(sql, [newRetencion.periodo, newRetencion.agente, newRetencion.contribuyente, newRetencion.numeroInscripcion, newRetencion.base, newRetencion.certificado, newRetencion.retenido], (err, res) => {
     if (err) {
       result(null, err);
-      return;
+      return console.log(err.message);
     }
 
-    console.log("created Retencion: ", { id: res.insertId, ...newRetencion });
-    result(null, { id: res.insertId, ...newRetencion });
+    result(null, res);
+    console.log(res);
+    return ("Se carga linea del retenciones");
   });
-};
 
 
-Retencion.findById = (id, result) => {
-  sql.query(`SELECT * FROM Retencions WHERE id = ${id}`, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
 
-    if (res.length) {
-      console.log("found Retencion: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found Retencion with the id
-    result({ kind: "not_found" }, null);
-  });
 };
 
 
 Retencion.getAll = (result) => {
-  let sql = "SELECT * FROM Retencion";
+  let sql = "SELECT * FROM  retenciones";
 
   // first row only
   database.appDatabase.all(sql, [], (err, res) => {
@@ -49,26 +40,37 @@ Retencion.getAll = (result) => {
       result(null, err);
       return;
     }
-
     result(null, res);
     return;
-
   });
-
-
-
 
 };
 
-Retencion.removeAll = result => {
-  sql.query("DELETE FROM Retenciones", (err, res) => {
+
+Tutorial.remove = (periodo, result) => {
+  database.appDatabase.all("DELETE FROM tutorials WHERE periodo = ?", periodo, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
       return;
     }
 
-    console.log(`deleted ${res.affectedRows} Retencions`);
+    console.log(res);
+    console.log(`deleted ${res.affectedRows} retenciones`);
+    result(null, res);
+  });
+};
+
+Retencion.removeAll = result => {
+  database.appDatabase.all("DELETE FROM retenciones", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log(res);
+    console.log(`deleted ${res.affectedRows} retenciones`);
     result(null, res);
   });
 };
