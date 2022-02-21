@@ -1,35 +1,44 @@
 const database = require("./db.js");
+const database2 = require("./db.js");
 
 // constructor
 const Retencion = function (Retencion) {
   this.periodo = Retencion.periodo;
-  this.agente = Retencion.agente;
-  this.contribuyente = Retencion.contribuyente;
-  this.numeroInscripcion = Retencion.numeroInscripcion;
-  this.base = Retencion.base;
-  this.certificado = Retencion.certificado;
-  this.retenido = Retencion.retenido;
+  this.juego = Retencion.juego;
+  this.agencia = Retencion.agencia;
+  this.cuit = Retencion.cuit;
+  this.recaudacion = Retencion.recaudacion;
+  this.comision = Retencion.comision;
+  this.ingresosBrutos = Retencion.ingresosBrutos;
 };
 
 Retencion.create = (newRetencion, result) => {
-
-  let sql = "INSERT INTO retenciones(periodo, agente, contribuyente, numeroInscripcion, base, certificado, retenido) VALUES(?,?)";
+  let sql =
+    "INSERT INTO retenciones(periodo, juego, agencia, cuit, recaudacion, comision, ingresos_brutos) VALUES(?,?,?,?,?,?,?)";
   // first row only
-  database.appDatabase.all(sql, [newRetencion.periodo, newRetencion.agente, newRetencion.contribuyente, newRetencion.numeroInscripcion, newRetencion.base, newRetencion.certificado, newRetencion.retenido], (err, res) => {
-    if (err) {
-      result(null, err);
-      return console.log(err.message);
+  database.appDatabase.all(
+    sql,
+    [
+      newRetencion.periodo,
+      newRetencion.juego,
+      newRetencion.agencia,
+      newRetencion.cuit,
+      newRetencion.recaudacion,
+      newRetencion.comision,
+      newRetencion.ingresosBrutos,
+    ],
+    (err, res) => {
+      if (err) {
+        result(null, err);
+        return console.log(err.message);
+      }
+
+      result(null, res);
+      console.log(res);
+      return "Se carga linea del retenciones";
     }
-
-    result(null, res);
-    console.log(res);
-    return ("Se carga linea del retenciones");
-  });
-
-
-
+  );
 };
-
 
 Retencion.getAll = (result) => {
   let sql = "SELECT * FROM  retenciones";
@@ -43,35 +52,50 @@ Retencion.getAll = (result) => {
     result(null, res);
     return;
   });
-
 };
 
+Retencion.removeAll = (periodo, juego, result) => {
+  database.appDatabase.all(
+    `DELETE FROM retenciones WHERE periodo=${periodo} and juego=${juego}`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
 
-Tutorial.remove = (periodo, result) => {
-  database.appDatabase.all("DELETE FROM tutorials WHERE periodo = ?", periodo, (err, res) => {
+      console.log(res);
+      console.log(`deleted ${res.affectedRows} retenciones`);
+      result(null, res);
+    }
+  );
+};
+
+Retencion.actualizarCuit = (result) => {
+  let sql = "SELECT * FROM  retenciones";
+
+  database.appDatabase.all(sql, [], (err, res) => {
     if (err) {
-      console.log("error: ", err);
       result(null, err);
       return;
     }
 
-    console.log(res);
-    console.log(`deleted ${res.affectedRows} retenciones`);
-    result(null, res);
-  });
-};
+    res.map((retencion) => {
+      let cuit = retencion.cuit.toString().replace("-", "").replace("-", "");
+      //cuit = cuit.replaceAll("-", "");
 
-Retencion.removeAll = result => {
-  database.appDatabase.all("DELETE FROM retenciones", (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
+      const agente = retencion.agencia.split("-")[0];
 
-    console.log(res);
-    console.log(`deleted ${res.affectedRows} retenciones`);
+      database2.appDatabase.all(
+        `UPDATE padron SET cuit =${cuit}  WHERE agente = ${agente}`,
+        (err, res) => {
+          console.log(err);
+        }
+      );
+    });
+
     result(null, res);
+    return;
   });
 };
 

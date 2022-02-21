@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 
 var corsOptions = {
-  origin: "*"
+  origin: "*",
 };
 
 /*
@@ -20,7 +20,9 @@ app.use(cors(corsOptions));
 app.use(express.json()); /* bodyParser.json() is deprecated */
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is deprecated */
+app.use(
+  express.urlencoded({ extended: true })
+); /* bodyParser.urlencoded() is deprecated */
 
 // simple route
 app.get("/", (req, res) => {
@@ -29,6 +31,7 @@ app.get("/", (req, res) => {
 
 require("./app/routes/juego.routes.js")(app);
 require("./app/routes/padron.routes.js")(app);
+require("./app/routes/retenciones.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
