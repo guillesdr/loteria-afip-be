@@ -99,4 +99,22 @@ Retencion.actualizarCuit = (result) => {
   });
 };
 
+Retencion.getMesJuegoTotal = (mes, juego, result) => {
+  console.log(mes);
+  console.log(juego);
+  let sql = `SELECT sum(comision) as comisiones FROM  retenciones where periodo = ${mes} and juego = ${juego}`;
+
+  console.log(sql);
+  // first row only
+  database.appDatabase.all(sql, [], (err, res) => {
+    if (err) {
+      result(null, err);
+      return;
+    }
+    console.log(res);
+    result(null, res);
+    return;
+  });
+};
+
 module.exports = Retencion;

@@ -59,3 +59,14 @@ exports.actualizarCuit = (req, res) => {
     res.send({ message: `Cuits Actualizados` });
   });
 };
+
+// Retrieve suma de comisiones por mes y juego
+exports.getMesJuegoTotal = (req, res) => {
+  const mes = req.params.mes;
+  const juego = req.params.juego;
+
+  Retenciones.getMesJuegoTotal(mes, juego, (err, data) => {
+    console.log(data);
+    res.send(data);
+  });
+};

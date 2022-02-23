@@ -15,5 +15,8 @@ module.exports = (app) => {
   // Actualizar Cuits
   router.get("/actualizarCuit", retenciones.actualizarCuit);
 
+  // Retrieve totalMesJuegoTotal
+  router.get("/getMesJuegoTotal/:mes/:juego", retenciones.getMesJuegoTotal);
+
   app.use("/api/retenciones", router);
 };

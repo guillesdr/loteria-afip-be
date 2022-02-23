@@ -1,0 +1,4 @@
+SELECT periodo, juegos.descripcion, sum(recaudacion), sum(comision), sum(ingresos_brutos)  FROM  retenciones , juegos
+WHERE juegos.id=retenciones.juego
+GROUP BY periodo, juego
+
