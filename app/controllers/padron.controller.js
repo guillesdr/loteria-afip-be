@@ -5,7 +5,7 @@ exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty!",
     });
   }
 
@@ -29,7 +29,7 @@ exports.create = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Padron."
+          err.message || "Some error occurred while creating the Padron.",
       });
     else res.send(data);
   });
@@ -41,7 +41,7 @@ exports.findAll = (req, res) => {
 
   Padron.getAll((title, data) => {
     console.log(data);
-    res.send(data)
+    res.send(data);
   });
 };
 
@@ -51,11 +51,11 @@ exports.findOne = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Padron with id ${req.params.id}.`
+          message: `Not found Padron with id ${req.params.id}.`,
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving Padron with id " + req.params.id
+          message: "Error retrieving Padron with id " + req.params.id,
         });
       }
     } else res.send(data);
@@ -67,8 +67,7 @@ exports.findAllPublished = (req, res) => {
   Padron.getAllPublished((err, data) => {
     if (err)
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving padrons."
+        message: err.message || "Some error occurred while retrieving padrons.",
       });
     else res.send(data);
   });
@@ -79,29 +78,25 @@ exports.update = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty!",
     });
   }
 
   console.log(req.body);
 
-  Padron.updateById(
-    req.params.id,
-    new Padron(req.body),
-    (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          res.status(404).send({
-            message: `Not found Padron with id ${req.params.id}.`
-          });
-        } else {
-          res.status(500).send({
-            message: "Error updating Padron with id " + req.params.id
-          });
-        }
-      } else res.send(data);
-    }
-  );
+  Padron.updateById(req.params.id, new Padron(req.body), (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Padron with id ${req.params.id}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error updating Padron with id " + req.params.id,
+        });
+      }
+    } else res.send(data);
+  });
 };
 
 // Delete a Padron with the specified id in the request
@@ -110,11 +105,11 @@ exports.delete = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Padron with id ${req.params.id}.`
+          message: `Not found Padron with id ${req.params.id}.`,
         });
       } else {
         res.status(500).send({
-          message: "Could not delete Padron with id " + req.params.id
+          message: "Could not delete Padron with id " + req.params.id,
         });
       }
     } else res.send({ message: `Padron was deleted successfully!` });
@@ -127,13 +122,28 @@ exports.deleteAll = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all padrons."
+          err.message || "Some error occurred while removing all padrons.",
       });
     else res.send({ message: `All Padrons were deleted successfully!` });
   });
 };
 
-
+// Find a single Padron by Id
+exports.findByNumeroAgencia = (req, res) => {
+  Padron.findByNumeroAgencia(req.params.numAgencia, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Padron with id ${req.params.numAgencia}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Padron with id " + req.params.numAgencia,
+        });
+      }
+    } else res.send(data);
+  });
+};
 
 /*
 

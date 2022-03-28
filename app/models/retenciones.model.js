@@ -117,4 +117,58 @@ Retencion.getMesJuegoTotal = (mes, juego, result) => {
   });
 };
 
+Retencion.getResumenComisiones = (result) => {
+  let sql = `SELECT j.descripcion juego, IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=1),0) "1",
+                
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=2),0) "2" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=3),0) "3" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=4),0) "4" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=5),0) "5" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=6),0) "6" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=7),0) "7" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=8),0) "8" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=9),0) "9" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=10),0) "10" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=11),0) "11" ,
+                
+                IFNULL((SELECT sum(comision) FROM  retenciones r WHERE r.juego=j.id
+                AND periodo=11),0) "12" 
+                
+              FROM juegos j
+              ORDER BY j.descripcion`;
+
+  console.log(sql);
+  // first row only
+  database.appDatabase.all(sql, [], (err, res) => {
+    if (err) {
+      result(null, err);
+      return;
+    }
+    console.log(res);
+    result(null, res);
+    return;
+  });
+};
+
 module.exports = Retencion;

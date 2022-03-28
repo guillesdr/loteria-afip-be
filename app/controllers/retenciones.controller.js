@@ -70,3 +70,14 @@ exports.getMesJuegoTotal = (req, res) => {
     res.send(data);
   });
 };
+
+// Retrieve resumen todal de comisiones
+exports.getResumenComisiones = (req, res) => {
+  const mes = req.params.mes;
+  const juego = req.params.juego;
+
+  Retenciones.getResumenComisiones((err, data) => {
+    console.log(data);
+    res.send(data);
+  });
+};

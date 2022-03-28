@@ -18,5 +18,8 @@ module.exports = (app) => {
   // Retrieve totalMesJuegoTotal
   router.get("/getMesJuegoTotal/:mes/:juego", retenciones.getMesJuegoTotal);
 
+  // Retrieve Resumen Comisiones
+  router.get("/getResumen", retenciones.getResumenComisiones);
+
   app.use("/api/retenciones", router);
 };

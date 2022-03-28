@@ -15,31 +15,42 @@ const Padron = function (Padron) {
   this.activas = Padron.activas;
 };
 
-
-
 Padron.create = (newPadron, result) => {
-
-  console.log(newPadron)
-  let sql = "INSERT INTO padron(agente, nombre, documento, domicilio, localidad, telefono, cuit, ingresosBrutos, habilitacion, asignadas, activas) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+  console.log(newPadron);
+  let sql =
+    "INSERT INTO padron(agente, nombre, documento, domicilio, localidad, telefono, cuit, ingresosBrutos, habilitacion, asignadas, activas) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
   // first row only
-  database.appDatabase.all(sql, [newPadron.agente, newPadron.nombre, newPadron.documento, newPadron.domicilio, newPadron.localidad, newPadron.telefono, newPadron.cuit, newPadron.ingresosBrutos, newPadron.habilitacion, newPadron.asignadas, newPadron.activas], (err, res) => {
-    if (err) {
-      result(null, err);
-      return console.log(err.message);
+  database.appDatabase.all(
+    sql,
+    [
+      newPadron.agente,
+      newPadron.nombre,
+      newPadron.documento,
+      newPadron.domicilio,
+      newPadron.localidad,
+      newPadron.telefono,
+      newPadron.cuit,
+      newPadron.ingresosBrutos,
+      newPadron.habilitacion,
+      newPadron.asignadas,
+      newPadron.activas,
+    ],
+    (err, res) => {
+      if (err) {
+        result(null, err);
+        console.log(err.message);
+        return console.log(err.message);
+      }
+
+      result(null, res);
+      //console.log(res);
+      return "Se carga linea del padron";
     }
-
-    result(null, res);
-    console.log(res);
-    return ("Se carga linea del padron");
-  });
-
-
-
+  );
 };
 
-
 Padron.getAll = (result) => {
-  let sql = "SELECT * FROM  padron";
+  let sql = "SELECT * FROM  padron order by agente";
 
   // first row only
   database.appDatabase.all(sql, [], (err, res) => {
@@ -50,13 +61,9 @@ Padron.getAll = (result) => {
     result(null, res);
     return;
   });
-
 };
 
-
-
-
-Padron.removeAll = result => {
+Padron.removeAll = (result) => {
   database.appDatabase.all("DELETE FROM padron", (err, res) => {
     if (err) {
       console.log("error: ", err);
@@ -67,6 +74,20 @@ Padron.removeAll = result => {
     console.log(res);
     console.log(`deleted ${res.affectedRows} padron`);
     result(null, res);
+  });
+};
+
+Padron.findByNumeroAgencia = (numAgencia, result) => {
+  console.log(numAgencia);
+  let sql = `SELECT * FROM padron WHERE agente = ${numAgencia}`;
+  // first row only
+  database.appDatabase.all(sql, [], (err, res) => {
+    if (err) {
+      result(null, err);
+      return;
+    }
+    result(null, res);
+    return;
   });
 };
 
